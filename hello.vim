@@ -1,5 +1,5 @@
 " Print Hello
-function! HelloTest()
+function! HelloTest() abort
   echo "Hello"
 endfunction
 
