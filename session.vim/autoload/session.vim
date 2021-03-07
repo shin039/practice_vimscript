@@ -72,11 +72,15 @@ function! session#sessions() abort
     nnoremap <silent> <buffer>
           \   <Plug>(session-open)
           \   :<C-u>call session#load_session(trim(getline('.')))<CR>
+    nnoremap <silent> <buffer>
+          \   <Plug>(session-delete)
+          \   :<C-u>call session#delete_session(trim(getline('.')))<CR>
 
     nmap <buffer> q    <Plug>(session-close)
     nmap <buffer> e    <Plug>(session-close)
     nmap <buffer> o    <Plug>(session-open)
     nmap <buffer> <CR> <Plug>(session-open)
+    nmap <buffer> d    <Plug>(session-delete)
   endif
 
   " delete buffer contents
@@ -85,12 +89,29 @@ function! session#sessions() abort
 endfunction
 
 " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+" Session Delete
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+function! session#delete_session(file) abort
+  let delfile = join([g:session_path, a:file], s:sep)
+  try
+    call delete(expand(delfile))
+  catch
+    echo "session.vim: File Delete Err " .. v:exception
+  endtry
+
+  call session#sessions()
+  redraw
+  echo 'session.vim: deleted =>' a:file
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 " Session Create
 " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 function! session#create_session(file) abort
   execute 'mksession!' join([g:session_path, a:file], s:sep)
+  call session#sessions()
   redraw
-  echo 'session.vim: created'
+  echo 'session.vim: created => ' a:file
 endfunction
 
 " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
