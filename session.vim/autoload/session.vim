@@ -109,7 +109,6 @@ endfunction
 " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 function! session#create_session(file) abort
   execute 'mksession!' join([g:session_path, a:file], s:sep)
-  call session#sessions()
   redraw
   echo 'session.vim: created => ' a:file
 endfunction
